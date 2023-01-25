@@ -1,0 +1,57 @@
+Master :  10.0.0.4 20.40.61.61
+WorkerA : 10.0.0.5 20.40.61.62
+
+====== Installation =========
+
+
+RUN Step 1 to 5 both on Master and Worker nodes
+Step:1 Update the apt package index and install packages needed to use the Kubernetes apt repository:
+
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl
+
+Step2: Download the Google Cloud public signing key:
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+Step3: Add the Kubernetes apt repository:
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+Step4: Update apt package index, install kubelet, kubeadm and kubectl, and pin their version:
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+sudo systemctl enable kubelet
+
+Step5: Install RUNC
+
+sudo apt-get install docker.io
+sudo systemctl enable docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+sudo systemctl status docker
+
+Step6: Run this command ONLY om Master
+
+sudo kubeadm init  --apiserver-advertise-address=10.0.0.4 --pod-network-cidr=192.168.0.0/16 
+
+
+$ mkdir -p $HOME/.kube
+$ cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+$ chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+
+Step: 7: (ONLY on worker NODE) Run the join commadn to the Worker Node
+
+
+kubeadm join 10.0.0.4:6443 --token jz8p4o.q6mhygk1hyjwdf8m --discovery-token-ca-cert-hash sha256:8df9f047cac7653c9c969f2f667254b3c138a50ad7c0b585f7cf0bd7a7f100a7
+
+kubeadm token create --print-join-command
+
+
+===================================
+
+
+
+
