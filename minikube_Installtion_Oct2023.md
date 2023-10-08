@@ -1,4 +1,6 @@
 Ref: https://docs.docker.com/engine/install/ubuntu/
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
 
 # Installing Minikube on Ubuntu Linux
 
