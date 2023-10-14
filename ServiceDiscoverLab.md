@@ -1,49 +1,107 @@
-To create a GitHub repository with the information you provided, you can follow these steps:
 
-1. **Create a New Repository on GitHub:**
-   - Go to https://github.com and log in to your GitHub account.
-   - Click the "+" icon in the top right corner and select "New repository."
-   - Choose a repository name, for example, "k8s-nginx-labs."
-   - Choose the visibility (public or private) as per your preference.
-   - You can add a README file, but we will provide the YAML files separately, so it's not necessary.
+# Kubernetes Labs
 
-2. **Clone the Repository:**
-   - Clone the newly created repository to your local machine using the following command, replacing `<repository_url>` with your repository's URL:
-     ```bash
-     git clone <repository_url>
-     cd k8s-nginx-labs
-     ```
+In this repository, you'll find instructions and YAML files for two Kubernetes labs. 
 
-3. **Create a Directory Structure:**
-   - Create directories for each lab (Lab 1 and Lab 2) to keep your YAML files organized.
+## Lab 1: Creating a NodePort Service with Nginx Containers
 
-   ```bash
-   mkdir Lab1 Lab2
-   ```
+**my-nginx-deployment.yaml**
 
-4. **Create YAML Files:**
-   - Create YAML files for each lab based on the information you provided. Use a text editor or code editor to create these files. You can use the `vi` or `nano` text editor on your terminal, or you can use a code editor like Visual Studio Code.
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nginx
+      environment: production
+  template:
+    metadata:
+      labels:
+        app: nginx
+        environment: production
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+```
 
-   - In your `k8s-nginx-labs` directory, you can create the YAML files as follows:
+**nginx-service-nodeport.yaml**
 
-   **Lab 1 - Create a NodePort Service with Nginx Containers:**
-   - Create a file named `my-nginx-deployment.yaml` inside the `Lab1` directory and paste the content for Lab 1 into this file.
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 32023
+  selector:
+    app: nginx
+    environment: production
+```
 
-   **Lab 2 - Creating a ClusterIP Service with Nginx Containers:**
-   - Create a file named `nginx-deployment.yaml` inside the `Lab2` directory and paste the content for Lab 2 into this file.
+...
 
-   - Create a file named `nginx-service-clusterip.yaml` inside the `Lab2` directory and paste the content for creating a ClusterIP Service.
+## Lab 2: Creating a ClusterIP Service with Nginx Containers
 
-5. **Commit and Push Your Changes:**
-   - After creating and saving the YAML files in their respective directories, commit the changes to your local repository and then push them to GitHub.
+**nginx-deployment.yaml**
 
-   ```bash
-   git add .
-   git commit -m "Add Lab 1 and Lab 2 YAML files"
-   git push
-   ```
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nginx
+      environment: production
+  template:
+    metadata:
+      labels:
+        app: nginx
+        environment: production
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+```
 
-6. **Verify on GitHub:**
-   - Go to your GitHub repository in your web browser and verify that the YAML files have been successfully pushed.
+**nginx-service-clusterip.yaml**
 
-Now you have a GitHub repository with the two lab directories, each containing the necessary YAML files for Lab 1 and Lab 2. You can access and share these files with others through your GitHub repository.
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service-clusterip
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: nginx
+    environment: production
+```
+
+...
+
+```
+
+You can create a Markdown file (e.g., `k8s-labs.md`) and paste the YAML code as shown above to document your Kubernetes labs. This format makes it easy to read and understand the content of your YAML files within the Markdown document.
