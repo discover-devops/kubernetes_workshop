@@ -1,6 +1,4 @@
-Certainly! Below is a GitHub markdown (`.md`) file that summarizes the content you provided about Kubernetes Service Discovery:
 
-```markdown
 # Service Discovery in Kubernetes
 
 ## Overview
