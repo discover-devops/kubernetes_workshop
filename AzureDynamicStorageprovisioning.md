@@ -7,6 +7,9 @@ Each AKS cluster comes with four precreated storage classes, two of which are co
 
 2. **Managed-CSI-Premium Storage Class**: This class provisions a premium Azure Disk. Premium disks are SSD-based, offering high performance and low latency, making them ideal for VMs running production workloads. You can also use the managed-csi storage class, which is backed by Standard SSD locally redundant storage (LRS), when using the Azure Disk CSI driver on AKS.
 
+   ![image](https://github.com/discover-devops/kubernetes_workshop/assets/53135263/3f06bd22-1364-4187-9384-c5959c4f2886)
+
+
 To view the available storage classes in your AKS cluster, use the following command:
 
 ```bash
