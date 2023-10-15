@@ -1,9 +1,3 @@
-Here's a GitHub Markdown (`.md`) file containing the information you provided:
-
-```markdown
-# Creating and Using a Volume with Azure Disks in Azure Kubernetes Service (AKS)
-
-In this guide, you will learn how to create and use a persistent volume with Azure Disks in an Azure Kubernetes Service (AKS) cluster. A persistent volume represents storage provisioned for use with Kubernetes pods. You can provision it dynamically or statically, and it can be used with one or multiple pods.
 
 ## Preconfigured Storage Classes in AKS
 
