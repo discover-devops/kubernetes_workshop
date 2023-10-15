@@ -99,6 +99,11 @@ NAME                 STATUS   VOLUME                                     CAPACIT
 azure-managed-disk   Bound    pvc-1ee49883-763f-4715-a9ae-ed0494a04956   5Gi        RWO            managed-csi    13h
 
 ```
+
+![image](https://github.com/discover-devops/kubernetes_workshop/assets/53135263/9e1ade4f-1804-4c72-bb67-d08bdb289a1b)
+
+
+
 For more information on storage options in AKS and related topics, you can refer to the following references:
 
 - [Storage options for applications in Azure Kubernetes Service (AKS)](https://learn.microsoft.com/en-us/azure/aks/concepts-storage)
