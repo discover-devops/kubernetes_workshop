@@ -89,7 +89,16 @@ Now, you have a running pod with your Azure Disk mounted in the `/mnt/azure` dir
 ```bash
 kubectl describe pod mypod
 ```
+```bash
+$ kubectl get pvc
+NAME                 STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+azure-managed-disk   Pending                                      managed-csi    13h
 
+$ kubectl get pvc
+NAME                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+azure-managed-disk   Bound    pvc-1ee49883-763f-4715-a9ae-ed0494a04956   5Gi        RWO            managed-csi    13h
+
+```
 For more information on storage options in AKS and related topics, you can refer to the following references:
 
 - [Storage options for applications in Azure Kubernetes Service (AKS)](https://learn.microsoft.com/en-us/azure/aks/concepts-storage)
