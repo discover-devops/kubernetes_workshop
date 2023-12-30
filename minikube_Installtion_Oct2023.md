@@ -105,4 +105,6 @@ Next, we need to install the `kubectl` command-line utility:
 You can now start Minikube with the following command:
 
 ```bash
+$ sudo usermod -aG docker $USER && newgrp docker
 $ minikube start --driver=docker
+
