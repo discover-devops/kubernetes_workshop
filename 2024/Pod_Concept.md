@@ -40,4 +40,4 @@ spec:
 - **metadata:** Unique information identifying the created object.
 - **spec:** Pod specifications, including container names, image names, volumes, and resource requests. While apiVersion, kind, and metadata are universal fields, spec, though mandatory, varies in layout across different object types.
 
-Feel free to adapt this information based on your needs and dive into the versatile world of Kubernetes pods.
+
