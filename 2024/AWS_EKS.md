@@ -58,7 +58,7 @@ eksctl create cluster --name my-cluster \
 #### Delete EKS Cluster:
 
 ```bash
-eksctl delete cluster valaxy --region ap-south-1
+eksctl delete cluster my-cluster --region ap-south-1
 ```
 
 #### Validate Cluster:
