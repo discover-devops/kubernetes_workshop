@@ -83,6 +83,4 @@ kubectl expose deployment demo-nginx --port=80 --type=LoadBalancer
 kubectl get services -o wide
 ```
 
----
 
-Feel free to copy and use this Markdown document as needed!
