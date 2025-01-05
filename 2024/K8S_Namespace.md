@@ -2,6 +2,10 @@
 
 A **Namespace** in Kubernetes is a virtual cluster within a physical cluster. It provides a way to divide cluster resources between multiple users or teams. Each Namespace acts as a logical boundary for resources and enables resource isolation and organization.
 
+
+![image](https://github.com/user-attachments/assets/85e3150d-411e-4e12-8dcb-439dd169c809)
+
+
 ---
 
 ### **Key Features of Namespaces**
