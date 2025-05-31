@@ -2,6 +2,10 @@
 
 A Kubernetes Namespace is a way to divide cluster resources between multiple users. Namespaces are intended for use in environments with many users spread across multiple teams, or projects. Namespaces provide a mechanism for isolating groups of resources within a single cluster.
 
+
+![image](https://github.com/user-attachments/assets/820e6aac-8212-42ac-9658-8511a34bb7ea)
+
+
 ### YAML to Create Namespaces
 
 1. **Create Namespaces `test` and `prod`**
