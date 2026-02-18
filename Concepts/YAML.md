@@ -140,4 +140,4 @@ Exposes port 80 from the container, which is the default port for nginx.
 
 ---
 
-Let me know if you want this simplified even further or need a diagram.
+
