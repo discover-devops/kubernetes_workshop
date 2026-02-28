@@ -1,462 +1,317 @@
+## Kubernetes Lab 1
+
+## Installing Minikube on Ubuntu Using Docker Driver
+
+### Overview
+
+In this lab, we will set up a local Kubernetes cluster on an Ubuntu machine using Minikube and Docker. This setup is intended for learning and development purposes. By the end of this lab, you will have a working single-node Kubernetes cluster running locally.
+
+You will:
+
+* Install Docker
+* Install Minikube
+* Install kubectl
+* Start a Kubernetes cluster
+* Deploy and expose a sample application
 
 ---
 
-LAB 1
-Install Minikube on Ubuntu Using Docker Driver
-----------------------------------------------
+## 1. Prerequisites
 
-CONTEXT
+Before starting, ensure the following:
 
-In this lab, we will create a local Kubernetes cluster on an Ubuntu machine.
+* Ubuntu 20.04 or 22.04 installed
+* At least 2 CPU cores
+* Minimum 2 GB RAM
+* At least 20 GB free disk space
+* User account with sudo privileges
 
-We are not using cloud like Amazon EKS or Azure AKS.
-We are creating a local cluster for development and learning.
+You can verify system resources using:
 
-Minikube will create:
+Check CPU:
 
-Control Plane
-Worker Node
-Networking
-Container Runtime
-
-All inside your local machine.
-
-Docker will be used as the container runtime.
-
----
-
-WHAT WE ARE BUILDING
-
-Ubuntu Machine
-|
-Docker Installed
-|
-Minikube Installed
-|
-kubectl Installed
-|
-Local Kubernetes Cluster Running
-
----
-
-PREREQUISITES CHECK
-
-Minimum Requirements
-
-2 CPU cores
-2 GB RAM
-20 GB free disk
-Ubuntu 20.04 or 22.04
-
-Check CPU
-
-Command
+```
 nproc
+```
 
-Purpose
-Shows how many CPU cores are available.
+Check memory:
 
-Check memory
-
-Command
+```
 free -h
+```
 
-Purpose
-Shows available RAM.
+Check disk space:
 
-Check disk
-
-Command
+```
 df -h
-
-Purpose
-Shows disk usage.
+```
 
 ---
 
-STEP 1
-Update Ubuntu Packages
-----------------------
+## 2. Install Docker
 
-Command
+Minikube will use Docker as the driver to create the Kubernetes node. So Docker must be installed first.
 
+### Step 2.1: Update Package Index
+
+```
 sudo apt update
+```
 
-Purpose
-
-sudo
-Runs command as administrator.
-
-apt
-Ubuntu package manager.
-
-update
-Refresh package list from internet repositories.
-
-This ensures system knows latest available packages.
+This refreshes the list of available packages from Ubuntu repositories.
 
 ---
 
-STEP 2
-Install Required Utilities
---------------------------
+### Step 2.2: Install Required Utilities
 
-Command
-
+```
 sudo apt install ca-certificates curl -y
+```
 
-Purpose
-
-ca-certificates
-Allows secure HTTPS downloads.
-
-curl
-Used to download files from internet.
-
--y
-Automatically answer yes to prompts.
+* `ca-certificates` enables secure HTTPS communication.
+* `curl` is used to download files from the internet.
+* `-y` automatically confirms installation.
 
 ---
 
-STEP 3
-Create Docker Keyring Directory
--------------------------------
+### Step 2.3: Create Docker Key Directory
 
-Command
-
+```
 sudo install -m 0755 -d /etc/apt/keyrings
+```
 
-Purpose
-
-install
-Used to create directory.
-
--m 0755
-Sets permissions.
-
--d
-Creates directory.
-
-This creates secure folder to store Docker repository keys.
+This creates a secure directory where Docker’s repository keys will be stored.
 
 ---
 
-STEP 4
-Add Docker GPG Key
-------------------
+### Step 2.4: Add Docker GPG Key
 
-Command
+```
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+```
 
-sudo curl -fsSL [https://download.docker.com/linux/ubuntu/gpg](https://download.docker.com/linux/ubuntu/gpg) -o /etc/apt/keyrings/docker.asc
-
-Purpose
-
-curl
-Downloads file.
-
--f
-Fail silently if error.
-
--s
-Silent mode.
-
--S
-Show errors.
-
--L
-Follow redirects.
-
--o
-Save output to file.
-
-This downloads Docker security key so Ubuntu can trust Docker packages.
+This downloads Docker’s official signing key so Ubuntu can verify the authenticity of Docker packages.
 
 ---
 
-STEP 5
-Add Docker Repository
----------------------
+### Step 2.5: Add Docker Repository
 
-Command
+```
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+```
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] [https://download.docker.com/linux/ubuntu](https://download.docker.com/linux/ubuntu) $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list
-
-Purpose
-
-echo
-Prints text.
-
-dpkg --print-architecture
-Shows CPU architecture like amd64.
-
-VERSION_CODENAME
-Detects Ubuntu version.
-
-tee
-Writes output to file.
-
-This tells Ubuntu where to download Docker from.
+This command adds Docker’s official repository to the system’s package sources.
 
 ---
 
-STEP 6
-Install Docker
---------------
+### Step 2.6: Install Docker Engine
 
-Command
-
+```
 sudo apt update
 sudo apt install docker-ce docker-ce-cli containerd.io -y
+```
 
-Purpose
+This installs:
 
-docker-ce
-Docker engine.
-
-docker-ce-cli
-Docker command line tool.
-
-containerd.io
-Container runtime backend.
-
-Now Docker engine is installed.
+* Docker Engine
+* Docker CLI
+* Container runtime (containerd)
 
 ---
 
-STEP 7
-Allow Current User to Run Docker Without sudo
----------------------------------------------
+### Step 2.7: Allow Current User to Run Docker Without sudo
 
-Command
-
+```
 sudo usermod -aG docker $USER
+```
 
-Purpose
+This adds your user to the Docker group.
 
-usermod
-Modifies user account.
+Apply the change:
 
--aG docker
-Adds user to docker group.
-
-$USER
-Current logged in user.
-
-This allows running docker commands without sudo.
-
-Activate group change
-
-Command
-
+```
 newgrp docker
+```
 
-Purpose
+Verify Docker installation:
 
-Refresh group membership without logging out.
-
-Verify Docker
-
-Command
-
+```
 docker version
+```
 
-If this works without sudo, Docker is ready.
+If it shows version details without using sudo, Docker is installed correctly.
 
 ---
 
-STEP 8
-Install Minikube
-----------------
+## 3. Install Minikube
 
-Download Minikube
+Minikube is used to create a local Kubernetes cluster.
 
-Command
+### Step 3.1: Download Minikube
 
-wget [https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64](https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64)
+```
+wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+```
 
-Purpose
+This downloads the latest Minikube binary.
 
-wget
-Downloads file from internet.
+---
 
-Move to system path
+### Step 3.2: Move Binary to System Path
 
-Command
-
+```
 sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+```
 
-Purpose
+This moves the binary to a global location so it can be executed from anywhere.
 
-/usr/local/bin
-System wide command directory.
+---
 
-Make executable
+### Step 3.3: Make It Executable
 
-Command
-
+```
 sudo chmod +x /usr/local/bin/minikube
+```
 
-Purpose
+This gives execution permission.
 
-chmod +x
-Makes file executable.
+Verify installation:
 
-Verify
-
-Command
-
+```
 minikube version
+```
 
 ---
 
-STEP 9
-Install kubectl
----------------
+## 4. Install kubectl
 
-Download kubectl
+kubectl is the command-line tool used to interact with Kubernetes.
 
-Command
+### Step 4.1: Download kubectl
 
-curl -LO [https://storage.googleapis.com/kubernetes-release/release/$(curl](https://storage.googleapis.com/kubernetes-release/release/$%28curl) -s [https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl](https://storage.googleapis.com/kubernetes-release/release/stable.txt%29/bin/linux/amd64/kubectl)
+```
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+```
 
-Purpose
+This downloads the latest stable version.
 
-Downloads latest stable Kubernetes CLI tool.
+---
 
-Make executable
+### Step 4.2: Make It Executable
 
-Command
-
+```
 chmod +x kubectl
+```
 
-Move to system path
+---
 
-Command
+### Step 4.3: Move to System Path
 
+```
 sudo mv kubectl /usr/local/bin/
+```
 
-Verify
+Verify installation:
 
-Command
-
+```
 kubectl version --client
-
-kubectl is now ready.
+```
 
 ---
 
-STEP 10
-Start Minikube Cluster
-----------------------
+## 5. Start Minikube Cluster
 
-Command
+Now we create the Kubernetes cluster.
 
+```
 minikube start --driver=docker
+```
 
-Purpose
+What this does:
 
-minikube start
-Creates Kubernetes cluster.
+* Creates a Kubernetes control plane inside a Docker container
+* Configures networking
+* Sets up kubectl context automatically
 
---driver=docker
-Uses Docker to create Kubernetes node.
-
-What happens internally
-
-Docker container is created
-Kubernetes control plane starts
-Networking is configured
-kubectl config is updated
+This process may take a few minutes.
 
 ---
 
-STEP 11
-Verify Cluster
---------------
+## 6. Verify Cluster
 
-Check nodes
+Check nodes:
 
-Command
-
+```
 kubectl get nodes
+```
 
-Expected output
+You should see one node in Ready state.
 
-One node in Ready state.
+Check system pods:
 
-Check pods
-
-Command
-
+```
 kubectl get pods -A
+```
 
-Shows system pods running.
+This shows all pods running in all namespaces.
 
 ---
 
-STEP 12
-Deploy First Application
-------------------------
+## 7. Deploy a Sample Application
 
-Create deployment
+Create a deployment:
 
-Command
-
+```
 kubectl create deployment nginx --image=nginx
+```
 
-Purpose
+This creates a pod running the nginx container.
 
-Creates a pod running nginx container.
+Expose the deployment as a service:
 
-Expose service
-
-Command
-
+```
 kubectl expose deployment nginx --type=NodePort --port=80
+```
 
-Purpose
+This makes the application accessible via a NodePort.
 
-Creates service so app can be accessed.
+Access the application:
 
-Get service URL
-
-Command
-
+```
 minikube service nginx
+```
 
-This opens browser.
+This will open the application in a browser.
 
 ---
 
-STEP 13
-Stop and Delete Cluster
------------------------
+## 8. Stop or Delete the Cluster
 
-Stop cluster
+To stop the cluster:
 
+```
 minikube stop
+```
 
-Delete cluster
+To completely delete it:
 
+```
 minikube delete
+```
 
-Purpose
-
-Stop frees CPU and RAM.
-Delete removes cluster completely.
-
----
-
-LAB LEARNING OUTCOME
-
-What Docker does
-What Minikube does
-What kubectl does
-How local Kubernetes works
-Basic Linux command purpose
-Cluster verification
-Application deployment
+Stopping preserves cluster state.
+Deleting removes it entirely.
 
 ---
 
+## Lab Outcome
 
+After completing this lab, students should understand:
+
+* The role of Docker in Kubernetes
+* How Minikube creates a local cluster
+* How kubectl interacts with Kubernetes
+* How to deploy and expose an application
+* How to verify cluster health
+
+This completes Lab 1.
