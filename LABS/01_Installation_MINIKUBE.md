@@ -1,12 +1,3 @@
-Perfect Rahul 👍
-I will create this exactly in your teaching style:
-
-Context
-Concept
-Step by Step Lab
-Command Purpose Explanation
-
-This will be beginner friendly for students with limited Linux knowledge.
 
 ---
 
@@ -457,8 +448,6 @@ Delete removes cluster completely.
 ---
 
 LAB LEARNING OUTCOME
-
-Students understand
 
 What Docker does
 What Minikube does
