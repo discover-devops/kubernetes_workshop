@@ -1,9 +1,8 @@
-
----
-
 #  Table of Contents
+
+
 ### **"Prometheus in Kubernetes using Helm"**
-#### *A 2-Hour Hands-On Workshop*
+
 
 ---
 
