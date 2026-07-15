@@ -56,7 +56,7 @@ Recall from your HPA lab: the controller doesn't scale instantly on every fluctu
 
 This asymmetry is deliberate: **scaling up fast is cheap and safe; scaling down fast is risky and can cause thrashing.**
 
-### 🔧 Verification Exercise — check this on your own cluster
+###  Verification Exercise — check this on your own cluster
 
 You already have HPA experience from the earlier lab series. Let's verify you can read this behavior directly from a live object, not just recall it:
 
