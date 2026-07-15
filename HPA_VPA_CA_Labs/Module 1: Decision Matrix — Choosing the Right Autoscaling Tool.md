@@ -9,7 +9,7 @@
 
 ## The Running Analogy: Hotstar Streaming the IPL Final
 
-Forget hotels and kitchens. Think about what actually happens inside Hotstar/Disney+ Hotstar's infrastructure on IPL Final night, when **59+ million concurrent viewers** hit the platform at the exact same moment the toss happens. This is a real, famous, publicly-discussed scaling event in the Indian tech industry — and every autoscaling concept in this module maps onto a real decision Hotstar's engineering team actually had to make.
+Think about what actually happens inside Hotstar/Disney+ Hotstar's infrastructure on IPL Final night, when **59+ million concurrent viewers** hit the platform at the exact same moment the toss happens. This is a real, famous, publicly-discussed scaling event in the Indian tech industry — and every autoscaling concept in this module maps onto a real decision Hotstar's engineering team actually had to make.
 
 - **HPA** is the layer that decides: *"how many API server replicas do I need right now, this minute, to handle the concurrent viewer count?"*
 - **VPA** is the layer that decides: *"is each individual video-transcoding pod correctly sized, or is it starved for CPU / wasting memory?"*
