@@ -72,7 +72,7 @@ kubectl get hpa php-apache -o jsonpath='{.spec.behavior}' | jq . 2>/dev/null || 
 kubectl delete hpa php-apache --ignore-not-found
 ```
 
-> 📝 If no explicit `behavior` block is set (common), the controller still applies the 0s/300s defaults internally — they just won't show in the YAML. This is a subtlety worth knowing: **absence of the field doesn't mean absence of the behavior.**
+>  If no explicit `behavior` block is set (common), the controller still applies the 0s/300s defaults internally — they just won't show in the YAML. This is a subtlety worth knowing: **absence of the field doesn't mean absence of the behavior.**
 
 ---
 
