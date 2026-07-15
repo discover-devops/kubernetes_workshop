@@ -1,7 +1,8 @@
 # Module 1: Decision Matrix — Choosing the Right Autoscaling Tool
 
 **Format:** Concept-first, with verification exercises against your existing cluster (no new infrastructure — you already built and ran HPA, VPA, and Cluster Autoscaler in the earlier lab series; this module is about **deciding correctly**, not building again)
-**Duration:** ~45–60 minutes
+
+
 **Prerequisites:** Completed the HPA, VPA, and Cluster Autoscaler lab series on `scaling-demo-cluster`
 
 ---
