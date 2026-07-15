@@ -108,10 +108,10 @@ VPA sees "new" CPU behavior → evicts again
 
 | Scenario | Safe? | Why |
 |---|---|---|
-| HPA on CPU + VPA on Memory | ✅ Safe | Different metrics, no feedback loop |
-| HPA on custom metrics (e.g., requests/sec) + VPA on CPU/Memory | ✅ Safe | No overlap at all |
-| HPA on CPU + VPA on CPU | ❌ Conflict | Both reacting to the same signal, feedback loop |
-| HPA on Memory + VPA on Memory | ❌ Conflict | Same problem, different metric |
+| HPA on CPU + VPA on Memory |  Safe | Different metrics, no feedback loop |
+| HPA on custom metrics (e.g., requests/sec) + VPA on CPU/Memory |  Safe | No overlap at all |
+| HPA on CPU + VPA on CPU |  Conflict | Both reacting to the same signal, feedback loop |
+| HPA on Memory + VPA on Memory |  Conflict | Same problem, different metric |
 
 **Rule of thumb:** if you must run both on the same workload, keep them on strictly separate metrics — or run VPA in `Off` mode (recommendation-only, exactly like Step 5 of your Lab 2) so it never actually evicts anything, and let HPA own all real scaling action.
 
