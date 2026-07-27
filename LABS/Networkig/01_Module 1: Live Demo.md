@@ -14,7 +14,7 @@
 
 ##  Part 1: Concept Walkthrough (2 min)
 
-### Script for You:
+### Concept:
 
 > "Before Kubernetes, applications lived on fixed servers with known IPs. When containers arrived, things got complex. Now, imagine you're running 300 containers across 10 nodes. Each container has an IP. But here's the problem: containers die and respawn constantly with NEW IPs.
 >
@@ -126,7 +126,7 @@ kubectl -n demo-networking delete pod $POD_A_NAME --wait=false
 # that replacement pod has a DIFFERENT IP address!
 ```
 
-### What Students See:
+### What You See:
 
 ```
 Terminal 1 (watching pods):
@@ -154,7 +154,7 @@ The new pod is running at 10.0.67.9, but we're still
 trying to call 10.0.23.4. That IP is DEAD FOREVER.
 ```
 
-### What You Say:
+### Concept:
 
 > "See what just happened? We had a pod at 10.0.23.4. It crashed. K8s created a replacement immediately. But that new pod has a completely different IP: 10.0.67.9.
 >
@@ -443,4 +443,4 @@ POD_IP=$(kubectl -n demo-networking get pods -o jsonpath='{.items[0].status.podI
 kubectl -n demo-networking run test --image=curlimages/curl --rm -it -- curl -m 2 http://$POD_IP:80 > /dev/null 2>&1 && echo "✓ Everything works!" || echo "✗ Issue found"
 ```
 
-All green? You're ready to teach!
+
