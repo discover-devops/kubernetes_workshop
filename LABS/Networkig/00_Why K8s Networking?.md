@@ -502,7 +502,7 @@ All of this is automated by K8s!
 
 ---
 
-## 📋 Hands-On Lab 3: Why We Need Services (The Real Problem)
+## Hands-On Lab 3: Why We Need Services (The Real Problem)
 
 ### Goal
 Show that relying on pod IPs is unreliable in practice.
