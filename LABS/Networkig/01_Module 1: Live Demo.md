@@ -232,7 +232,7 @@ kubectl -n demo-networking exec $POD1 -- curl -s http://$POD3_IP:80 | head -5
 # You'll get HTML response from Pod 3's nginx!
 ```
 
-### What You Say:
+### Concept:
 
 > "Here's something remarkable: Pod 1 is running on node-1. Pod 3 is running on node-3. They're on completely different machines. Yet Pod 1 can reach Pod 3 directly as if they're on the same local network.
 >
