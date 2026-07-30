@@ -75,7 +75,7 @@ It *looks* healthy. But real users are getting:
 Connection Timeout
 ```
 
-**Question for the class:** Should Kubernetes restart this Pod?
+**Ask yourself:** Should Kubernetes restart this Pod?
 
 **Answer:** Yes — but here's the catch. Kubernetes doesn't understand Java, Python, or your application logic. All it knows is:
 
@@ -215,7 +215,7 @@ Instead, the Readiness Probe reports `NOT READY` for those 45 seconds. The Servi
 
 ---
 
-## Liveness vs. Readiness — The Table Every Student Confuses
+## Liveness vs. Readiness — The Table Worth Memorizing
 
 | | **Liveness** | **Readiness** |
 |---|---|---|
@@ -230,7 +230,7 @@ Instead, the Readiness Probe reports `NOT READY` for those 45 seconds. The Servi
 
 ## Connecting Back to Init Containers
 
-This is where the full lifecycle finally clicks into place for students.
+This is where the full lifecycle finally clicks into place.
 
 ```
 Init Container
