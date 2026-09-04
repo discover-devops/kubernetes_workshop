@@ -293,41 +293,305 @@ Do not continue until containerd is running correctly on **all 3 nodes**.
 
 ---
 
-# Step 8 — Install kubeadm, kubelet and kubectl
+## Step 8 — Install kubeadm, kubelet and kubectl
 
-We need three Kubernetes components:
+We now have the Linux machine prepared and containerd configured. The next step is to install the Kubernetes tools.
 
-### kubeadm
+### Why are we installing these three?
 
-Used to create and join the cluster.
+Think of them as three different responsibilities:
 
-### kubelet
+**`kubeadm` — Cluster setup tool**
 
-Runs on every node and manages Kubernetes Pods.
+`kubeadm` is used to bootstrap the Kubernetes cluster.
 
-### kubectl
+We will use it to:
 
-Command-line tool used to communicate with the Kubernetes API server.
+* initialize the control-plane node
+* generate certificates and cluster configuration
+* generate the worker join command
+* join worker nodes to the cluster
 
-Install the Kubernetes packages on **all 3 nodes**.
+For example:
 
-Use the current Kubernetes package repository for the Kubernetes minor version you have selected. The repository must match across all three nodes.
+```bash
+kubeadm init
+```
 
-After installation, verify:
+creates the control plane, while:
+
+```bash
+kubeadm join ...
+```
+
+joins a worker to the cluster.
+
+---
+
+**`kubelet` — Node agent**
+
+`kubelet` runs on **every Kubernetes node**.
+
+Its job is to:
+
+* communicate with the Kubernetes API server
+* receive instructions about Pods
+* make sure the required containers are running
+* report node and Pod status back to the control plane
+
+You can think of it as the **agent responsible for running workloads on a node**.
+
+---
+
+**`kubectl` — Administrator/client tool**
+
+`kubectl` is the command-line tool we use to interact with the Kubernetes cluster.
+
+For example:
+
+```bash
+kubectl get nodes
+```
+
+asks the Kubernetes API server for the list of nodes.
+
+Later we will use commands such as:
+
+```bash
+kubectl get pods
+kubectl create
+kubectl apply
+kubectl describe
+kubectl logs
+kubectl scale
+```
+
+---
+
+## 8.1 Add the Kubernetes package repository
+
+Run this on **all 3 nodes**:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+```
+
+Create the keyring directory:
+
+```bash
+sudo mkdir -p -m 755 /etc/apt/keyrings
+```
+
+Add the Kubernetes signing key:
+
+```bash
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | \
+sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+```
+
+Add the Kubernetes repository:
+
+```bash
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | \
+sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+
+Update the package index:
+
+```bash
+sudo apt-get update
+```
+
+### Why are we doing this?
+
+Ubuntu's default repositories don't necessarily contain the Kubernetes packages/version we want.
+
+`pkgs.k8s.io` is the Kubernetes community package repository.
+
+The important thing is that **all three nodes use the same Kubernetes minor-version repository**.
+
+Here we are using:
+
+```text
+v1.35
+```
+
+So all three machines should use the same repository.
+
+---
+
+## 8.2 Install kubeadm, kubelet and kubectl
+
+Run on **all 3 nodes**:
+
+```bash
+sudo apt-get install -y kubelet kubeadm kubectl
+```
+
+Prevent these packages from being automatically changed during an `apt upgrade`:
+
+```bash
+sudo apt-mark hold kubelet kubeadm kubectl
+```
+
+### Why hold the packages?
+
+We don't want one node to accidentally get upgraded to a different Kubernetes version while the other nodes remain on the old version.
+
+For a Kubernetes cluster, keeping the components aligned is important.
+
+---
+
+## 8.3 Verify the installation
+
+Run:
 
 ```bash
 kubeadm version
+```
+
+Then:
+
+```bash
 kubelet --version
+```
+
+Then:
+
+```bash
 kubectl version --client
 ```
 
-Enable kubelet:
+You should get output showing the Kubernetes version you selected.
+
+For example:
+
+```text
+kubeadm version: v1.35.x
+kubelet: v1.35.x
+kubectl: v1.35.x
+```
+
+The exact patch version may differ depending on what is currently available in the repository.
+
+---
+
+## 8.4 Enable kubelet
+
+Run:
 
 ```bash
 sudo systemctl enable kubelet
 ```
 
-The kubelet may not be fully running yet because the cluster has not been initialized. That is normal.
+You can also check its status:
+
+```bash
+sudo systemctl status kubelet --no-pager
+```
+
+### Important: Don't panic if kubelet isn't fully running yet
+
+At this point, we **have not created the Kubernetes cluster yet**.
+
+We haven't run:
+
+```bash
+kubeadm init
+```
+
+on the master.
+
+Therefore, kubelet doesn't yet have a complete cluster configuration to work with.
+
+So the important thing at this stage is:
+
+```text
+kubelet installed
+        ↓
+kubeadm installed
+        ↓
+kubectl installed
+        ↓
+containerd running
+        ↓
+Ready for kubeadm init
+```
+
+---
+
+## 8.5 Final check before moving forward
+
+On **all three nodes**, verify:
+
+```bash
+containerd --version
+```
+
+```bash
+kubeadm version
+```
+
+```bash
+kubelet --version
+```
+
+```bash
+kubectl version --client
+```
+
+And:
+
+```bash
+grep SystemdCgroup /etc/containerd/config.toml
+```
+
+This must show:
+
+```text
+SystemdCgroup = true
+```
+
+Also verify:
+
+```bash
+sysctl net.ipv4.ip_forward
+```
+
+Expected:
+
+```text
+net.ipv4.ip_forward = 1
+```
+
+### At this point
+
+Your three EC2 machines are prepared:
+
+```text
+Ubuntu 24.04
+      ↓
+Swap disabled
+      ↓
+Kernel modules configured
+      ↓
+iptables / forwarding configured
+      ↓
+containerd installed
+      ↓
+SystemdCgroup = true
+      ↓
+kubeadm installed
+kubelet installed
+kubectl installed
+      ↓
+READY FOR CLUSTER INITIALIZATION
+```
+
+**Next:** we move to the master and run `kubeadm init` with the **Pod CIDR explicitly configured**. That `--pod-network-cidr=192.168.0.0/16` is particularly important given the Calico issue we encountered earlier.
+
+
 
 ---
 
