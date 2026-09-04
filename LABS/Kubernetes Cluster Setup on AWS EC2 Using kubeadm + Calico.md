@@ -13,18 +13,8 @@ In this runbook, we will create a Kubernetes cluster using:
 
 At the end, you should have:
 
-```text
-                    Kubernetes Cluster
-                           |
-                    +------+------+
-                    |             |
-              K8s Master      Worker Nodes
-              10.0.1.x        Worker-01
-                    |          Worker-02
-                    |
-                 Calico
-              Pod Networking
-```
+<img width="1186" height="705" alt="image" src="https://github.com/user-attachments/assets/33c6e56b-1593-493a-adb4-2213c6d3f0c4" />
+
 
 ---
 
